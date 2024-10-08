@@ -401,9 +401,16 @@ function ReportActionsList({
         }
     };
 
+    const handleUnreadReportWhenScrolledToTheBottom = () => {
+        if (scrollingVerticalOffset.current <= 0 && !!unreadMarkerReportActionID) {
+            Report.readNewestAction(report.reportID, true);
+        }
+    }
+
     const trackVerticalScrolling = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         scrollingVerticalOffset.current = event.nativeEvent.contentOffset.y;
         handleUnreadFloatingButton();
+        handleUnreadReportWhenScrolledToTheBottom();
         onScroll?.(event);
     };
 
@@ -415,7 +422,7 @@ function ReportActionsList({
         }
         reportScrollManager.scrollToBottom();
         readActionSkipped.current = false;
-        Report.readNewestAction(report.reportID);
+        Report.readNewestAction(report.reportID, true);
     };
 
     /**
